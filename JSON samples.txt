@@ -1,0 +1,58 @@
+Area chart:
+[{Year: "2013", Sales: 1000, Expenses: 400}, {Year: "2014", Sales: 1170, Expenses: 460}, {Year: "2015", Sales: 660, Expenses: 1120}, {Year: "2016", Sales: 1030, Expenses: 540}]
+
+
+Bar chart:
+[{"City":"New York City, NY","2010 Population":8175000},{"City":"Los Angeles, CA","2010 Population":3792000},{"City":"Chicago, IL","2010 Population":2695000},{"City":"Houston, TX","2010 Population":2099000},{"City":"Philadelphia, PA","2010 Population":1526000}]
+
+
+Column chart (simple):
+[{"Year":"2012","Asia":900,"Europe":400},{"Year":"2013","Asia":1000,"Europe":500},{"Year":"2014","Asia":1170,"Europe":530},{"Year":"2015","Asia":1250,"Europe":570},{"Year":"2016","Asia":1530,"Europe":600}]
+
+[{Year: "2004", Sales: 1000, Expenses: 400, Profit: 600}, {Year: "2005", Sales: 1170, Expenses: 460, Profit: 710}, {Year: "2006", Sales: 660, Expenses: 1120, Profit: -460}, {Year: "2007", Sales: 1030, Expenses: 540, Profit: 490}]
+
+[{Month: "2019-01", Employees: 300}, {Month: "2019-02", Employees: 308}, {Month: "2019-03", Employees: 312}, {Month: "2019-04", Employees: 317}, {Month: "2019-05", Employees: 326}]
+
+[{Employees: 300, Month: "2019-01"}, {Employees: 308, Month: "2019-02"}, {Employees: 312, Month: "2019-03"}, {Employees: 317, Month: "2019-04"}, {Employees: 326, Month: "2019-05"}]
+
+[{Employees: 300}, {Employees: 308}, {Employees: 312}, {Employees: 317}, {Employees: 326}]
+
+
+Geo chart:
+[{Country:"China",Population:1409},{Country:"India",Population:1339},{Country:"United States",Population:324},{Country:"Indonesia",Population:263},{Country:"Brazil",Population:209},{Country:"Pakistan",Population:197},{Country:"Nigeria",Population:190},{Country:"Bangladesh",Population:164},{Country:"Russia",Population:143}]
+
+
+Histogram:
+[{"Dinosaur" : "Acrocanthosaurus (top-spined lizard)","Length" : 12.2},{"Dinosaur" : "Albertosaurus (Alberta lizard)","Length" : 9.1},{"Dinosaur" : "Allosaurus (other lizard)","Length" : 12.2},{"Dinosaur" : "Apatosaurus (deceptive lizard)","Length" : 22.9},{"Dinosaur" : "Supersaurus (super lizard)","Length" : 30.5},{"Dinosaur" : "Tyrannosaurus (tyrant lizard)","Length" : 15.2},{"Dinosaur" : "Ultrasaurus (ultra lizard)","Length" : 30.5},{"Dinosaur" : "Velociraptor (swift robber)","Length" : 1.8}]
+
+
+Line chart (simple):
+[3, 6, 3.4, 7, 6.2, 2, 4]
+[0,1,2,3,4,5,6,7,8,9,10]
+[0,1,2,3,4,10,6,7,8,9,10]
+[3,6,3.4,7]
+[{Count: 3},{Count: 6},{Count: 3.4},{Count: 7}]
+
+
+Line chart:
+[{Year: "2004", Sales: 1000, Expenses: 400}, {Year: "2005", Sales: 1170, Expenses: 460}, {Year: "2006", Sales: 660, Expenses: 1120}, {Year: "2007", Sales: 1030, Expenses: 540}]
+
+[{Year: "2004", Sales: 1000, Expenses: 400, Profit: 600}, {Year: "2005", Sales: 1170, Expenses: 460, Profit: 710}, {Year: "2006", Sales: 660, Expenses: 1120, Profit: -460}, {Year: "2007", Sales: 1030, Expenses: 540, Profit: 490}]
+
+
+Pie chart:
+[{Topping: "Mushrooms", Slices: 3}, {Topping: "Onions", Slices: 1}, {Topping: "Olives", Slices: 1}, {Topping: "Zucchini", Slices: 1}, {Topping: "Pepperoni", Slices: 2}]
+
+[{Topping: "Mushrooms", Slices: 3}, {Topping: "Onions", Slices: 1}, {Topping: "Olives", Slices: 1}, {Topping: "Zucchini", Slices: 1}, {Topping: "Pepperoni", Slices: 2}, {Topping: "T1", Slices: 1}, {Topping: "T2", Slices: 1}, {Topping: "T3", Slices: 1}, {Topping: "T4", Slices: 1}, {Topping: "T5", Slices: 1}, {Topping: "T6", Slices: 1}, {Topping: "T7", Slices: 1}]
+
+
+Scatter chart:
+{Month: "2019-01", Employees: 300}
+
+[{Age: 8, Weight: 12}, {Age: 4, Weight: 5.5}, {Age: 11, Weight: 14}, {Age: 4, Weight: 5}, {Age: 3, Weight: 3.5}, {Age: 6.5, Weight: 7}]
+
+[{Sales: 1000, Expenses: 400}, {Sales: 1170, Expenses: 460}, {Sales: 660, Expenses: 1120}, {Sales: 1030, Expenses: 540}]
+
+[{Year: "2004", Sales: 1000, Expenses: 400, Profit: 600}, {Year: "2005", Sales: 1170, Expenses: 460, Profit: 710}, {Year: "2006", Sales: 960, Expenses: 560, Profit: 400}, {Year: "2007", Sales: 1030, Expenses: 540, Profit: 490}]
+
+[{"0":1,"67":88},{"0":2,"67":77},{"0":3,"67":93},{"0":4,"67":85},{"0":5,"67":91},{"0":6,"67":71},{"0":7,"67":78},{"0":8,"67":93},{"0":9,"67":80},{"0":10,"67":82},{"0":0,"67":75},{"0":5,"67":80},{"0":3,"67":90},{"0":1,"67":72},{"0":5,"67":75},{"0":6,"67":68},{"0":7,"67":98},{"0":3,"67":82},{"0":9,"67":94},{"0":2,"67":79},{"0":2,"67":95},{"0":2,"67":86},{"0":3,"67":67},{"0":4,"67":60},{"0":2,"67":80},{"0":6,"67":92},{"0":2,"67":81},{"0":8,"67":79},{"0":9,"67":83},{"0":3,"67":75},{"0":1,"67":80},{"0":3,"67":71},{"0":3,"67":89},{"0":4,"67":92},{"0":5,"67":85},{"0":6,"67":92},{"0":7,"67":78},{"0":6,"67":95},{"0":3,"67":81},{"0":0,"67":64},{"0":4,"67":85},{"0":2,"67":83},{"0":3,"67":96},{"0":4,"67":77},{"0":5,"67":89},{"0":4,"67":89},{"0":7,"67":84},{"0":4,"67":92},{"0":9,"67":98}]

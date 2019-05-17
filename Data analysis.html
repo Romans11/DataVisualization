@@ -1,0 +1,304 @@
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<body>
+	<textarea id="jsonDataInput" rows="10" cols="160"></textarea><br/>
+	<button type="button" onclick="drawAutoChart()">Draw automatic chart</button>
+	<button type="button" onclick="changeInputData()">Set as input data</button>
+	Columns: <input type="text" id="columnsInput" value="" size="100">
+	<br/><br/>
+	<div id="buttonDiv" style="visibility: hidden">
+		<button type="button" onclick="drawChart('area')">Area chart</button>
+		<button type="button" onclick="drawChart('bar')">Bar chart</button>
+		<button type="button" onclick="drawChart('columnSimple')">Column chart (simple)</button>
+		<button type="button" onclick="drawChart('donut')">Donut chart</button>
+		<button type="button" onclick="drawChart('geo')">Geo chart</button>
+		<button type="button" onclick="drawChart('histogram')">Histogram</button>
+		<button type="button" onclick="drawChart('line')">Line chart</button>
+		<button type="button" onclick="drawChart('lineWithoutCurve')">Line chart (normal)</button>
+		<button type="button" onclick="drawChart('lineSimple')">Line chart (simple)</button>
+		<button type="button" onclick="drawChart('lineSimpleWithoutCurve')">Line chart (simple, normal)</button>
+		<button type="button" onclick="drawChart('pie')">Pie chart</button>
+		<button type="button" onclick="drawChart('scatter')">Scatter chart</button>
+	</div>
+	<div>
+		<button type="button" onclick="exportPNG()">Export PNG</button>
+		<button type="button" onclick="exportSVG()">Export SVG</button>
+	</div>
+	<div id="chart_div" style="width: 100%; height: 100%"></div>
+</body>
+
+<script src="Visualization.js"></script>
+
+<script>
+var jsonDataFromServer = {
+	"msg" : "result",
+	"id" : "11",
+	"result" : {
+		"status" : 200,
+		"result" : {
+			"sparql" : {
+				"$" : {
+					"xmlns" : "http://www.w3.org/2005/sparql-results#",
+					"xmlns:xsi" : "http://www.w3.org/2001/XMLSchema-instance",
+					"xsi:schemaLocation" : "http://www.w3.org/2001/sw/DataAccess/rf1/result2.xsd"
+				},
+				"head" : [{"variable" : [{"$" : {"name" : "gender"}}, {"$" : {"name" : "C"}} ]}],
+				"results" : [{
+						"$" : {"distinct" : "false", "ordered" : "true"},
+						"result" : [{
+								"binding" : [{
+										"$" : {"name" : "gender"},
+										"literal" : [{"_" : "male", "$" : {"datatype" : "http://www.w3.org/2001/XMLSchema#string"}}]
+									}, {
+										"$" : {"name" : "C"},
+										"literal" : [{"_" : "32276", "$" : {"datatype" : "http://www.w3.org/2001/XMLSchema#integer"}}]
+									}
+								]
+							}, {
+								"binding" : [{
+										"$" : {"name" : "gender"},
+										"literal" : [{"_" : "female", "$" : {"datatype" : "http://www.w3.org/2001/XMLSchema#string"}}]
+									}, {
+										"$" : {"name" : "C"},
+										"literal" : [{"_" : "32363", "$" : {"datatype" : "http://www.w3.org/2001/XMLSchema#integer"}}]
+									}
+								]
+							}
+						]
+					}
+				]
+			},
+			"limit_set" : false,
+			"number_of_rows" : "2"
+		}
+	}
+};
+
+
+var convertDataToObjArray = function(input) {
+	var output = [];
+	var columnNames = input[0];
+	for (var i = 1; i < input.length; i++) {
+		var obj = {};
+		for (var j = 0; j < columnNames.length; j++) {
+			obj[columnNames[j]] = input[i][j];
+		}
+		output.push(obj);
+	}
+	return output;
+};
+
+consoleLogVisualizationData = function() {
+	console.log(Visualization.jsonDataFromServer);
+	console.log(Visualization.jsonData);
+	console.log("Columns: " + Visualization.dataColumns.join(", "));
+	console.log("Main data types: " + Visualization.mainDataTypes.join(", "));
+	console.log(Visualization.mainDataTypes);
+	console.log("Item count: " + Visualization.itemCount);
+	console.log("Default chart type: " + Visualization.getDefaultChartType());
+};
+
+Visualization.setData(jsonDataFromServer);
+consoleLogVisualizationData();
+
+
+var loadButtons = function() {
+	document.getElementById("buttonDiv").style.visibility = "visible";
+};
+
+
+google.charts.load('current', {'packages':['corechart', 'bar', 'geochart']});
+
+var sampleNumberArray = [3, 6, 3.4, 7, 6.2, 2, 4];
+var simpleLineChartOptions = {title : 'Line chart (simple)', curveType : 'function', legend : {position : 'none'}};
+var simpleLineChartOptionsWithoutCurve = {title : 'Line chart (simple)', curveType : 'none', legend : {position : 'none'}};
+
+var lineChartData = [{Year: "2004", Sales: 1000, Expenses: 400}, {Year: "2005", Sales: 1170, Expenses: 460}, {Year: "2006", Sales: 660, Expenses: 1120}, {Year: "2007", Sales: 1030, Expenses: 540}];
+var lineChartOptions = {title : 'Line chart', curveType : 'function', legend : {position : 'bottom'}, vAxis:{minValue: 0}};
+var lineChartOptionsWithoutCurve = {title : 'Line chart', curveType : 'none', legend : {position : 'bottom'}, vAxis:{minValue: 0}};
+
+var barChartData = [{"City":"New York City, NY","2010 Population":8175000},{"City":"Los Angeles, CA","2010 Population":3792000},{"City":"Chicago, IL","2010 Population":2695000},{"City":"Houston, TX","2010 Population":2099000},{"City":"Philadelphia, PA","2010 Population":1526000}];
+var barChartOptions = {title: 'Bar chart', chartArea: {width: '50%'}, hAxis: {title: 'X'}, vAxis: {title: 'Y'}};
+
+var pieInputDataArr = [{Topping: "Mushrooms", Slices: 3}, {Topping: "Onions", Slices: 1}, {Topping: "Olives", Slices: 1}, {Topping: "Zucchini", Slices: 1}, {Topping: "Pepperoni", Slices: 2}];
+var pieInputColumns = [{name: "Topping", type: "string"}, {name: "Slices", type: "number"}];
+var pieOptions = {'title' : 'Pie chart'};
+var donutOptions = {'title' : 'Donut chart', 'pieHole': 0.4};
+
+var areaOptions = {title: 'Area chart', hAxis: {title: 'X',  titleTextStyle: {color: '#333'}}, vAxis: {minValue: 0}};
+var areaInputData = [{Year: "2013", Sales: 1000, Expenses: 400}, {Year: "2014", Sales: 1170, Expenses: 460}, {Year: "2015", Sales: 660, Expenses: 1120}, {Year: "2016", Sales: 1030, Expenses: 540}];
+
+var scatterInputData = [{Age: 8, Weight: 12}, {Age: 4, Weight: 5.5}, {Age: 11, Weight: 14}, {Age: 4, Weight: 5}, {Age: 3, Weight: 3.5}, {Age: 6.5, Weight: 7}];
+var scatterOptions = {title : 'Scatter chart', hAxis : {title : 'X', minValue : 0, maxValue : 15}, vAxis : {title : 'Y', minValue : 0, maxValue : 15}, legend : 'none'};
+
+var simpleColumnChartInputData = [{"Year":"2012","Asia":900,"Europe":400},{"Year":"2013","Asia":1000,"Europe":500},{"Year":"2014","Asia":1170,"Europe":530},{"Year":"2015","Asia":1250,"Europe":570},{"Year":"2016","Asia":1530,"Europe":600}];
+var simpleColumnChartOptions = {title: 'Simple column chart', vAxis:{minValue: 0}};
+
+var histogramData = [{"Dinosaur" : "Acrocanthosaurus (top-spined lizard)","Length" : 12.2},
+{"Dinosaur" : "Albertosaurus (Alberta lizard)","Length" : 9.1},
+{"Dinosaur" : "Allosaurus (other lizard)","Length" : 12.2},
+{"Dinosaur" : "Apatosaurus (deceptive lizard)","Length" : 22.9},
+{"Dinosaur" : "Archaeopteryx (ancient wing)","Length" : 0.9},
+{"Dinosaur" : "Argentinosaurus (Argentina lizard)","Length" : 36.6},
+{"Dinosaur" : "Baryonyx (heavy claws)","Length" : 9.1},
+{"Dinosaur" : "Brachiosaurus (arm lizard)","Length" : 30.5},
+{"Dinosaur" : "Ceratosaurus (horned lizard)","Length" : 6.1},
+{"Dinosaur" : "Coelophysis (hollow form)","Length" : 2.7},
+{"Dinosaur" : "Compsognathus (elegant jaw)","Length" : 0.9},
+{"Dinosaur" : "Deinonychus (terrible claw)","Length" : 2.7},
+{"Dinosaur" : "Diplodocus (double beam)","Length" : 27.1},
+{"Dinosaur" : "Dromicelomimus (emu mimic)","Length" : 3.4},
+{"Dinosaur" : "Gallimimus (fowl mimic)","Length" : 5.5},
+{"Dinosaur" : "Mamenchisaurus (Mamenchi lizard)","Length" : 21},
+{"Dinosaur" : "Megalosaurus (big lizard)","Length" : 7.9},
+{"Dinosaur" : "Microvenator (small hunter)","Length" : 1.2},
+{"Dinosaur" : "Ornithomimus (bird mimic)","Length" : 4.6},
+{"Dinosaur" : "Oviraptor (egg robber)","Length" : 1.5},
+{"Dinosaur" : "Plateosaurus (flat lizard)","Length" : 7.9},
+{"Dinosaur" : "Sauronithoides (narrow-clawed lizard)","Length" : 2},
+{"Dinosaur" : "Seismosaurus (tremor lizard)","Length" : 45.7},
+{"Dinosaur" : "Spinosaurus (spiny lizard)","Length" : 12.2},
+{"Dinosaur" : "Supersaurus (super lizard)","Length" : 30.5},
+{"Dinosaur" : "Tyrannosaurus (tyrant lizard)","Length" : 15.2},
+{"Dinosaur" : "Ultrasaurus (ultra lizard)","Length" : 30.5},
+{"Dinosaur" : "Velociraptor (swift robber)","Length" : 1.8}];
+var histogramOptions = {title: 'Histogram', legend: { position: 'none' }};
+
+var geoChartData = [{Country:"China",Population:1409},{Country:"India",Population:1339},{Country:"United States",Population:324},{Country:"Indonesia",Population:263},{Country:"Brazil",Population:209},{Country:"Pakistan",Population:197},{Country:"Nigeria",Population:190},{Country:"Bangladesh",Population:164},{Country:"Russia",Population:143}];
+var geoChartOptions = {};
+google.charts.load('current', {'packages':['geochart'],'mapsApiKey': 'AIzaSyD-9tSrke72PouQMnMX-a7eZSW0jkFMBWY'});
+
+google.charts.setOnLoadCallback(loadButtons);
+
+
+
+changeInputData = function() {
+	var inputString = document.getElementById("jsonDataInput").value;
+	var inputData = null;
+	try {
+		inputData = JSON.parse(inputString);
+	} catch (err) {};
+	console.time("Set input data");
+	if (!inputData) {
+		try {
+			var inputString = document.getElementById("jsonDataInput").value;
+			var inputJson = inputString.replace(/(['"])?([a-z0-9A-Z_]+)(['"])?:/g, '"$2": ');
+			var parsedData = JSON.parse(inputJson);
+			console.time("Set input data");
+			if (parsedData) {
+				jsonDataFromServer = parsedData;
+				if (document.getElementById("columnsInput").value) {
+					jsonDataFromServer = Visualization.pickPropertiesFromJson(jsonDataFromServer, document.getElementById("columnsInput").value.split(","));
+				}
+			}
+		} catch (error) {
+			alert("Wrong JSON input data");
+			console.timeEnd("Set input data");
+			return;
+		}
+	} else {
+		jsonDataFromServer = inputData;
+		if (document.getElementById("columnsInput").value) {
+			jsonDataFromServer = Visualization.pickPropertiesFromJson(jsonDataFromServer, document.getElementById("columnsInput").value.split(","));
+		}
+	}
+	Visualization.setData(jsonDataFromServer);
+	console.timeEnd("Set input data");
+	consoleLogVisualizationData();
+};
+
+
+drawAutoChart = function() {
+	if (!document.getElementById("jsonDataInput").value) {
+		alert("Please enter input JSON data!");
+		return;
+	}
+	try {
+		var inputString = document.getElementById("jsonDataInput").value;
+		var inputJson = inputString.replace(/(['"])?([a-z0-9A-Z_]+)(['"])?:/g, '"$2": ');
+		var inputData = JSON.parse(inputJson);
+	} catch (error) {
+		alert("Wrong JSON input data");
+		return;
+	}
+	
+	if (document.getElementById("columnsInput").value) {
+		var columns = document.getElementById("columnsInput").value.split(",");
+		inputData = Visualization.pickPropertiesFromJson(inputData, columns);
+		jsonDataFromServer = inputData;
+	}
+	
+	Visualization.setData(inputData);
+	Visualization.drawAutoChart();
+};
+
+
+drawChart = function(chartType) {
+	try {
+		console.time("Draw chart");
+		if (document.getElementById("jsonDataInput").value) {
+			Visualization.setData(jsonDataFromServer);
+			var inputDataForChart = Visualization.jsonData;
+			console.log(inputDataForChart);
+			Visualization.drawChartByType(chartType, inputDataForChart, Visualization._findDefaultOptionsForChartType(chartType));
+		} else {
+			switch(chartType) {
+				case "area": Visualization.drawAreaChart(areaInputData, areaOptions);
+					break;
+				case "bar": Visualization.drawBarChart(barChartData, barChartOptions);
+					break;
+				case "columnSimple": Visualization.drawSimpleColumnChart(simpleColumnChartInputData, simpleColumnChartOptions);
+					break;
+				case "donut": Visualization.drawPieChart(pieInputDataArr, donutOptions);
+					break;
+				case "geo": Visualization.drawGeoChart(geoChartData, geoChartOptions);
+					break;
+				case "histogram": Visualization.drawHistogram(histogramData, histogramOptions);
+					break;
+				case "line": Visualization.drawLineChart(lineChartData, lineChartOptions);
+					break;
+				case "lineSimple": Visualization.drawSimpleLineChart(sampleNumberArray, simpleLineChartOptions);
+					break;
+				case "lineSimpleWithoutCurve": Visualization.drawSimpleLineChart(sampleNumberArray, simpleLineChartOptionsWithoutCurve);
+					break;
+				case "lineWithoutCurve": Visualization.drawLineChart(lineChartData, lineChartOptionsWithoutCurve);
+					break;
+				case "pie": Visualization.drawPieChart(pieInputDataArr, pieOptions);
+					break;
+				case "scatter": Visualization.drawScatterChart(scatterInputData, scatterOptions);
+					break;
+			}
+		}
+		console.timeEnd("Draw chart");
+	} catch (err) {
+		console.timeEnd("Draw chart");
+		alert("Failed to draw the selected graph.\r\nReason: " + err.message);
+	}
+};
+
+var exportPNG = function() {
+	Visualization.exportPNG();
+};
+
+var exportSVG = function() {
+	Visualization.exportSVG();
+};
+
+var convertRawSparqlJsonToNormal = function(data) {
+	var result = [];
+	var keys = Object.keys(data[0]);
+	var i, j;
+	for (i = 0; i < data.length; i++) {
+		var currentObj = {};
+		for (j = 0; j < keys.length; j++) {
+			if (data[i][keys[j]]) {
+				currentObj[keys[j]] = data[i][keys[j]]["value"];
+			} else {
+				continue;
+			}
+		}
+		result.push(currentObj);
+	}
+	return result;
+};
+
+</script>
